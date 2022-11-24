@@ -10,19 +10,19 @@ namespace AlonWork_19
     {
         static void Main(string[] args)
         {
-            //Определить:
+        //Определить:
 
-            //    -все компьютеры с указанным процессором. Название процессора запросить у пользователя;
+        //    -все компьютеры с указанным процессором. Название процессора запросить у пользователя;
 
-            //    -все компьютеры с объемом ОЗУ не ниже, чем указано.Объем ОЗУ запросить у пользователя;
+        //    -все компьютеры с объемом ОЗУ не ниже, чем указано.Объем ОЗУ запросить у пользователя;
 
-            //    -вывести весь список, отсортированный по увеличению стоимости;
+        //    -вывести весь список, отсортированный по увеличению стоимости;
 
-            //    -вывести весь список, сгруппированный по типу процессора;
+        //    -вывести весь список, сгруппированный по типу процессора;
 
-            //    -найти самый дорогой и самый бюджетный компьютер;
+        //    -найти самый дорогой и самый бюджетный компьютер;
 
-            //    -есть ли хотя бы один компьютер в количестве не менее 30 штук?
+        //    -есть ли хотя бы один компьютер в количестве не менее 30 штук?
 
             List<PC> pc = new List<PC>()
             {
@@ -43,48 +43,36 @@ namespace AlonWork_19
             string n1 = "Intel";
             string n2 = "AMD";
             string n3 = "Baykal";
-            
+
             Console.WriteLine("1 - Intel");
-            Console.WriteLine("2 - AMD");            
+            Console.WriteLine("2 - AMD");
             Console.WriteLine("3 - Baykal");
-            
+
             Console.WriteLine();
             Console.WriteLine("Введите значение кода");
             int n = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine();
 
-            
+
             switch (n)
             {
                 case 1:
                     {
                         List<PC> pc1 = pc.Where(x => x.CPU == n1).ToList();
-                        foreach (PC e in pc)
-                        {
-                            Console.WriteLine($"{e.Num}, {e.Name}, CPU {e.CPU}, - {e.CPU_frequency}, RAM {e.RAM}, HDD {e.HDD}, GPU {e.GPU}, Цена {e.Price}, Количество {e.Amount}");
-                        }
-                        Console.WriteLine();
+                        Print(pc1);
                         break;
 
                     }
                 case 2:
                     {
                         List<PC> pc1 = pc.Where(x => x.CPU == n2).ToList();
-                        foreach (PC e in pc)
-                        {
-                            Console.WriteLine($"{e.Num}, {e.Name}, CPU {e.CPU}, - {e.CPU_frequency}, RAM {e.RAM}, HDD {e.HDD}, GPU {e.GPU}, Цена {e.Price}, Количество {e.Amount}");
-                        }
-                        Console.WriteLine();
+                        Print(pc1);
                         break;
                     }
                 case 3:
                     {
                         List<PC> pc1 = pc.Where(x => x.CPU == n3).ToList();
-                        foreach (PC e in pc)
-                        {
-                            Console.WriteLine($"{e.Num}, {e.Name}, CPU {e.CPU}, - {e.CPU_frequency}, RAM {e.RAM}, HDD {e.HDD}, GPU {e.GPU}, Цена {e.Price}, Количество {e.Amount}");
-                        }
-                        Console.WriteLine();
+                        Print(pc1);
                         break;
                     }
                 default:
@@ -93,16 +81,52 @@ namespace AlonWork_19
                         break;
                     }
             }
+            Console.WriteLine("Укажите объем оперативной памяти");
+            int ram = Convert.ToInt32(Console.ReadLine());
+            List<PC> pc2 = pc.Where(x => x.RAM >= ram).ToList();
+            Print(pc2);
+
+            Console.WriteLine("Список оборудования по увеличению стоимости");
+            List<PC> pc3 = pc.OrderBy(x => x.Price).ToList();
+            Print(pc3);
+
+            Console.WriteLine("Список оборудования по уменьшению стоимости");
+            List<PC> pc4 = pc.OrderByDescending(x => x.Price).ToList();
+            Print(pc4);
+
+            IEnumerable<IGrouping<string, PC>> pc5 = pc.GroupBy(x => x.CPU);
+            foreach (IGrouping<string, PC> gr in pc5)
+            {
+                Console.WriteLine(gr.Key);
+                foreach (PC e in gr)
+                {
+                    Console.WriteLine($"{e.Num}, {e.Name}, CPU {e.CPU}, - {e.CPU_frequency}, RAM {e.RAM}, HDD {e.HDD}, GPU {e.GPU}, Цена {e.Price}, Количество {e.Amount}");
+                }
+            }
+
+            Console.WriteLine("Самый бюджетный компьютер");
+            PC pc6 = pc.OrderBy(x => x.Price).FirstOrDefault();
+            Console.WriteLine($"{pc6.Num}, {pc6.Name}, CPU {pc6.CPU}, - {pc6.CPU_frequency}, RAM {pc6.RAM}, HDD {pc6.HDD}, GPU {pc6.GPU}, Цена {pc6.Price}, Количество {pc6.Amount}");
+            Console.WriteLine("");
+            Console.WriteLine("Самый дорогой компьютер");
+            PC pc7 = pc.OrderBy(x => x.Price).LastOrDefault();
+            Console.WriteLine($"{pc7.Num}, {pc7.Name}, CPU {pc7.CPU}, - {pc7.CPU_frequency}, RAM {pc7.RAM}, HDD {pc7.HDD}, GPU {pc7.GPU}, Цена {pc7.Price}, Количество {pc7.Amount}");
+
+            Console.WriteLine("Введите искомое количество компьютеров");
+            int p = Convert.ToInt32(Console.ReadLine());
+            List<PC> pc8 = pc.Where(x => x.Amount >= p).ToList();
+            Print(pc8);
             Console.ReadKey();
 
-            //static void Print(List<PC> pc)
-            //{
-            //    foreach (PC e in pc)
-            //    {
-            //        Console.WriteLine($"{e.Num} {e.Name} {e.CPU} {e.CPU_frequency} {e.RAM} {e.HDD} {e.GPU} {e.Price} {e.Amount}");
-            //    }
-            //    Console.WriteLine();
-            //}
+        }
+        static void Print(List<PC> pc)
+        {
+            foreach (PC e in pc)
+            {
+                Console.WriteLine($"{e.Num}, {e.Name}, CPU {e.CPU}, - {e.CPU_frequency}, RAM {e.RAM}, HDD {e.HDD}, GPU {e.GPU}, Цена {e.Price}, Количество {e.Amount}");
+            }
+            Console.WriteLine();
+
         }
     }
 }
